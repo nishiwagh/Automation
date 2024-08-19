@@ -1,0 +1,4 @@
+---
+- name: Set the timezone to America/Toronto
+  ansible.builtin.command: timedatectl set-timezone America/Toronto
+  when: ansible_facts['os_family'] == 'RedHat'

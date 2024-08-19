@@ -1,0 +1,28 @@
+---
+- name: Create an empty file called locfile on the automation machine
+  ansible.builtin.file:
+    path: "{{ file_name }}"
+    state: touch
+  delegate_to: localhost
+
+- name: Copy locfile to the managed nodes under the /tmp directory
+  ansible.builtin.copy:
+    src: "{{ file_name }}"
+    dest: "{{ file_path }}/{{ file_name }}"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "{{ permissions }}"
+
+- name: Display the status of the /tmp/locfile file
+  ansible.builtin.stat:
+    path: "{{ file_path }}/{{ file_name }}"
+  register: file_status
+
+- name: Print file status
+  ansible.builtin.debug:
+    var: file_status
+
+- name: Create an empty file called emptyfile on the managed nodes in your home directory
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/emptyfile"
+    state: touch

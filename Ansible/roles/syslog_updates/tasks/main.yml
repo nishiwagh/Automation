@@ -1,0 +1,26 @@
+---
+- name: Insert a block of text at the end of /etc/rsyslog.conf
+  ansible.builtin.blockinfile:
+    path: /etc/rsyslog.conf
+    block: |
+      $FileCreateMode 0640
+
+- name: Set ownership and permissions on /etc/rsyslog.d directory
+  ansible.builtin.file:
+    path: /etc/rsyslog.d
+    owner: root
+    group: root
+    mode: '0640'
+    recurse: yes
+
+- name: Set permissions on /var/log directory
+  ansible.builtin.file:
+    path: /var/log
+    mode: '0775'
+    recurse: no
+
+- name: Restart rsyslog service
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
+  notify: Restart rsyslog
